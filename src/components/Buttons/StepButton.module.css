@@ -1,0 +1,17 @@
+.button {
+    margin-bottom: 0.5rem;
+    padding: 0 0.7rem;
+    font-size: 1rem;
+    display: block;
+    height: 2.5rem;
+    outline: none;
+    border-radius: 0.4rem;
+    background-color: gold;
+    border:none;
+    cursor: pointer;
+}
+
+.button:hover{
+    transition: 300ms;
+    transform: scale(1.07);
+}
