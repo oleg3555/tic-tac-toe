@@ -85,9 +85,11 @@ class Game extends React.Component {
             xIsNext: !(step % 2),
         })
         if (step % 2 && this.state.botMode) {
-            setTimeout(() => {
-                this.jumpTo(step + 1);
-            }, 300)
+            if (this.state.history[step + 1].squares) {
+                setTimeout(() => {
+                    this.jumpTo(step + 1);
+                }, 300)
+            }
         }
     }
 
