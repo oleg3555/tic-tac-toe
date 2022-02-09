@@ -1,33 +1,18 @@
-.history {
+.history{
+    margin: 1rem auto;
+    width: 20rem;
     border: 1px solid white;
-    padding: 0.3rem;
     border-radius: 0.5rem;
-    position: absolute;
-    top:50%;
-    left:27%;
-    transform: translate(-50%,-50%);
 }
-
+.history__moves{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.6rem;
+}
 .history__title{
     font-size: 1.4rem;
     color: white;
     text-align: center;
     margin-bottom: 0.4rem;
-}
-
-@media screen and (max-width: 991px){
-    .history{
-        margin: 1rem auto;
-        width: 20rem;
-        position: static;
-        top:0;
-        left:0;
-        transform: none;
-    }
-    .history__moves{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        column-gap: 0.3rem;
-    }
 }
