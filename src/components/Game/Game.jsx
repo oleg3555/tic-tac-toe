@@ -42,6 +42,7 @@ class Game extends React.Component {
             xIsNext: true,
             stepNumber: 0,
             botMode: false,
+            isMoveBlocked: false,
             score: {
                 winsX: 0,
                 winsO: 0,
@@ -67,12 +68,16 @@ class Game extends React.Component {
 
 
     handleClick(i) {
-        this.fillSquare(i);
-        const squares = this.state.history[this.state.stepNumber].squares;
-        if (this.state.botMode && !squares[i]) {
-            setTimeout(() => {
-                this.fillSquare(bestBotMove(this.state.history[this.state.history.length - 1].squares));
-            }, 200)
+        if (!this.state.isMoveBlocked) {
+            this.fillSquare(i);
+            const squares = this.state.history[this.state.stepNumber].squares;
+            if (this.state.botMode && !squares[i]) {
+                this.setState({isMoveBlocked: true});
+                setTimeout(() => {
+                    this.setState({isMoveBlocked: false});
+                    this.fillSquare(bestBotMove(this.state.history[this.state.history.length - 1].squares));
+                }, 500)
+            }
         }
     }
 
@@ -85,7 +90,12 @@ class Game extends React.Component {
     }
 
     startNewGame() {
-        this.setState({...this.initStartState(), botMode: this.state.botMode});
+        this.setState(
+            {
+                ...this.initStartState(),
+                botMode: this.state.botMode,
+            }
+        );
     }
 
     jumpTo(isNextMove) {
