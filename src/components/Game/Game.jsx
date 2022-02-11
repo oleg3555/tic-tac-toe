@@ -18,7 +18,8 @@ class Game extends React.Component {
         this.boardHandleClick = this.handleClick.bind(this);
         this.startNewGameHandler = this.startNewGame.bind(this);
         this.enableBotModeHandler = this.enableBotMode.bind(this);
-        this.disableBotModeHandler = this.disableBotMode.bind(this);
+        this.disableBotModeHandler = this.disableBotMode.bind(this)
+        this.resetScoreHandler = this.resetScore.bind(this);
     }
 
     componentDidMount() {
@@ -29,6 +30,23 @@ class Game extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if (!this.state.isGameOver) {
+            const lastSquares = this.state.history[this.state.history.length - 1].squares;
+            const winner = calculateWinner(lastSquares);
+            if (winner) {
+                this.setState({
+                    isGameOver: true,
+                    score: {
+                        winsX: winner === GAME_SYMBOLS.X ? this.state.score.winsX + 1 : this.state.score.winsX,
+                        winsO: winner === GAME_SYMBOLS.O ? this.state.score.winsO + 1 : this.state.score.winsO,
+                    }
+                })
+            } else if (lastSquares.indexOf(null) < 0) {
+                this.setState({
+                    isGameOver: true,
+                })
+            }
+        }
         if (prevState !== this.state) {
             updateLocalStorageData(LocalStorageKeys.game, this.state);
         }
@@ -42,6 +60,7 @@ class Game extends React.Component {
             xIsNext: true,
             stepNumber: 0,
             botMode: false,
+            isGameOver: false,
             isMoveBlocked: false,
             score: {
                 winsX: 0,
@@ -68,10 +87,11 @@ class Game extends React.Component {
 
 
     handleClick(i) {
-        if (!this.state.isMoveBlocked) {
+        if (!(this.state.isMoveBlocked || this.state.isGameOver)) {
             this.fillSquare(i);
             const squares = this.state.history[this.state.stepNumber].squares;
-            if (this.state.botMode && !squares[i]) {
+            const isMoveLast = squares.filter(el => el === null).length === 1;
+            if (this.state.botMode && !(isMoveLast || squares[i])) {
                 this.setState({isMoveBlocked: true});
                 setTimeout(() => {
                     this.setState({isMoveBlocked: false});
@@ -90,17 +110,16 @@ class Game extends React.Component {
     }
 
     startNewGame() {
-        this.setState(
-            {
-                ...this.initStartState(),
-                botMode: this.state.botMode,
-            }
-        );
+        this.setState({
+            ...this.initStartState(),
+            botMode: this.state.botMode,
+            score: this.state.score,
+        });
     }
 
     jumpTo(isNextMove) {
         let step = isNextMove ? this.state.stepNumber + 1 : this.state.stepNumber - 1;
-        if (step % 2 && this.state.botMode) {
+        if (step % 2 && this.state.botMode && !this.state.isGameOver) {
             isNextMove ? step += 1 : step -= 1;
         }
         if (this.state.history[step]) {
@@ -109,6 +128,15 @@ class Game extends React.Component {
                 xIsNext: !(step % 2),
             })
         }
+    }
+
+    resetScore() {
+        this.setState({
+            score: {
+                winsX: 0,
+                winsO: 0,
+            }
+        })
     }
 
     render() {
@@ -120,7 +148,10 @@ class Game extends React.Component {
                 <GameMenu startNewGame={this.startNewGameHandler}
                           enableBotMode={this.enableBotModeHandler}
                           disableBotMode={this.disableBotModeHandler}/>
-                <GameInfo status={status} botMode={this.state.botMode}/>
+                <GameInfo status={status}
+                          botMode={this.state.botMode}
+                          resetScore={this.resetScoreHandler}
+                          score={this.state.score}/>
                 <Board squares={currentSquares} onClick={this.boardHandleClick}/>
                 <History jumpTo={this.jumpToHandleClick}/>
             </div>

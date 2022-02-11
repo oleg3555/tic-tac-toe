@@ -1,5 +1,5 @@
 .status {
-    margin-top: 3rem;
+    margin-top: 2rem;
     color: white;
     font-size: 2rem;
     text-align: center;
@@ -9,4 +9,24 @@
     font-size: 1.5rem;
     color: greenyellow;
     text-align: center;
+}
+.score{
+    width: 16rem;
+    margin: 0.8rem auto 0;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    align-items: center;
+    font-size: 1.6rem;
+}
+.resetBtn{
+    padding: 0.4rem;
+    font-size: 1rem;
+    color: #fcf5f5;
+    display: block;
+    outline: none;
+    border-radius: 0.4rem;
+    background-color: red;
+    border:none;
+    cursor: pointer;
 }

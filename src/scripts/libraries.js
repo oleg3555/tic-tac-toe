@@ -12,3 +12,8 @@ export const COLORS = {
     yellow: 'yellow',
     orange: 'orange'
 }
+
+export const GAME_MODES = {
+    vsBot: 'Game vs bot',
+    vsPlayer: 'Game vs player'
+}
