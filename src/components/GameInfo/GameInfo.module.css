@@ -1,6 +1,6 @@
 .status {
     margin-top: 2rem;
-    color: white;
+    color: var(--bgColor);
     font-size: 2rem;
     text-align: center;
 }
@@ -15,7 +15,7 @@
     margin: 0.8rem auto 0;
     display: flex;
     justify-content: space-between;
-    color: white;
+    color: var(--bgColor);
     align-items: center;
     font-size: 1.6rem;
 }

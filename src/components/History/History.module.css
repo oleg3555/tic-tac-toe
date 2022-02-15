@@ -1,7 +1,7 @@
 .history{
     margin: 1rem auto;
     width: 20rem;
-    border: 1px solid white;
+    border: 1px solid var(--bgColor);
     border-radius: 0.5rem;
 }
 .history__moves{
@@ -12,7 +12,7 @@
 }
 .history__title{
     font-size: 1.4rem;
-    color: white;
+    color: var(--bgColor);
     text-align: center;
     margin-bottom: 0.4rem;
 }

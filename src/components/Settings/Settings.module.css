@@ -16,7 +16,7 @@
     transform: translate(-50%, -50%);
     width: 18rem;
     height: 12rem;
-    background-color: white;
+    background-color: var(--bgColor);
     border-radius: 0.5rem;
 }
 

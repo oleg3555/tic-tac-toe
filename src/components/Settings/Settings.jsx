@@ -34,11 +34,11 @@ class Settings extends React.Component {
                             <div>
                                 <Checkbox onClick={this.props.enableBotMode}
                                           text={BUTTON_VALUES.vsBot}
-                                          id='bot'
+                                          name='bot'
                                           checked={this.props.botMode}/>
                                 <Checkbox onClick={this.props.disableBotMode}
                                           checked={!this.props.botMode}
-                                          id='player'
+                                          name='player'
                                           text={BUTTON_VALUES.vsFriend}/>
                             </div>
                             <button className={styles.resetBtn} onClick={this.props.resetScore}>Reset score</button>

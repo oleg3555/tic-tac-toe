@@ -1,14 +1,15 @@
 import React from "react";
 import styles from './Checkbox.module.css';
 
-export function Checkbox({checked, onClick, text, id}) {
+export function Checkbox({checked, onClick, text, name}) {
     return (
         <div>
             <input type="radio" autoComplete="off"
-                   id={id}
+                   id={name}
+                   name={name}
                    onChange={onClick}
                    checked={checked}/>
-            <label htmlFor={id} className={styles.label}>{text}</label>
+            <label htmlFor={name} className={styles.label}>{text}</label>
         </div>
     )
 }

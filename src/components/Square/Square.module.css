@@ -4,6 +4,6 @@
     background-color: #232121;
     font-size: 3rem;
     text-shadow: 1px 1px 3px #c4bfbf;
-    border: 2px solid white;
-    color: white;
+    border: 2px solid var(--bgColor);
+    color: var(--bgColor);
 }

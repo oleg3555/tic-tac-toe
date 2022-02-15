@@ -10,6 +10,7 @@ import {GAME_SYMBOLS} from "../../scripts/libraries";
 import {calculateBotMove} from "../../scripts/bot-move";
 import {calculateScore} from "../../scripts/calculate-score";
 import {initStartState} from "../../scripts/initStartState";
+import {getHistory, getSquares} from "../../scripts/helpers";
 
 class Game extends React.Component {
     constructor(props) {
@@ -54,16 +55,18 @@ class Game extends React.Component {
     }
 
     fillSquare(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const currentSquares = history[history.length - 1].squares;
+        const history = getHistory(this.state);
+        const currentSquares = getSquares(history);
         if (!(calculateWinner(currentSquares) || currentSquares[i])) {
-            const squares = [...currentSquares];
-            squares[i] = this.state.xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O;
             this.setState((prevState) => {
+                const prevHistory = getHistory(prevState);
+                const squares = [...getSquares(prevHistory)];
+                squares[i] = this.state.xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O;
                 return {
-                    history: history.concat([{squares: squares}]),
+                    ...prevState,
+                    history: prevHistory.concat([{squares}]),
                     xIsNext: !prevState.xIsNext,
-                    stepNumber: history.length,
+                    stepNumber: prevHistory.length,
                 }
             });
         }
