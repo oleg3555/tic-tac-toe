@@ -61,7 +61,7 @@ class Game extends React.Component {
             this.setState((prevState) => {
                 const prevHistory = getHistory(prevState);
                 const squares = [...getSquares(prevHistory)];
-                squares[i] = this.state.xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O;
+                squares[i] = prevState.xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O;
                 return {
                     ...prevState,
                     history: prevHistory.concat([{squares}]),
