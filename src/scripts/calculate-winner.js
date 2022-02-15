@@ -16,5 +16,5 @@ export function calculateWinner(squares) {
             return squares[a];
         }
     }
-    return squares.indexOf(null) < 0 ? 'tie' : null;
+    return null;
 }

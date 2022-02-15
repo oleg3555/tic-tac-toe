@@ -9,7 +9,7 @@ export function GameInfo({status, botMode, score,resetScore}) {
             <div className={styles.description}>{botMode ? GAME_MODES.vsBot : GAME_MODES.vsPlayer}</div>
             <div className={styles.score}>
                 <div>{GAME_SYMBOLS.X}: {score.winsX}</div>
-                <button className={styles.resetBtn} onClick={resetScore}>Reset score</button>
+                <div className={styles.text}>Score</div>
                 <div>{GAME_SYMBOLS.O}: {score.winsO}</div>
             </div>
         </div>

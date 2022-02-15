@@ -25,6 +25,6 @@ function getRandomIndex(squareArray) {
 
 }
 
-export function bestBotMove(squaresArray) {
+export function calculateBotMove(squaresArray) {
     return getWinIndex(squaresArray, GAME_SYMBOLS.X) || getWinIndex(squaresArray, GAME_SYMBOLS.O) || getRandomIndex(squaresArray);
 }

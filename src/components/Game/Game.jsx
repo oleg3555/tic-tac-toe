@@ -7,13 +7,14 @@ import '../../App.css'
 import {GameMenu} from "../GameMenu/GameMenu";
 import {GameInfo} from "../GameInfo/GameInfo";
 import {GAME_SYMBOLS} from "../../scripts/libraries";
-import {bestBotMove} from "../../scripts/bot-move";
-
+import {calculateBotMove} from "../../scripts/bot-move";
+import {calculateScore} from "../../scripts/calculate-score";
+import {initStartState} from "../../scripts/initStartState";
 
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = this.initStartState();
+        this.state = initStartState();
         this.jumpToHandleClick = this.jumpTo.bind(this);
         this.boardHandleClick = this.handleClick.bind(this);
         this.startNewGameHandler = this.startNewGame.bind(this);
@@ -34,11 +35,13 @@ class Game extends React.Component {
             const lastSquares = this.state.history[this.state.history.length - 1].squares;
             const winner = calculateWinner(lastSquares);
             if (winner) {
+                const {winsX, winsO} = this.state.score;
+                const {updatedWinsX, updatedWinsO} = calculateScore(winner, winsX, winsO);
                 this.setState({
                     isGameOver: true,
                     score: {
-                        winsX: winner === GAME_SYMBOLS.X ? this.state.score.winsX + 1 : this.state.score.winsX,
-                        winsO: winner === GAME_SYMBOLS.O ? this.state.score.winsO + 1 : this.state.score.winsO,
+                        winsX: updatedWinsX,
+                        winsO: updatedWinsO,
                     }
                 })
             } else if (lastSquares.indexOf(null) < 0) {
@@ -47,26 +50,7 @@ class Game extends React.Component {
                 })
             }
         }
-        if (prevState !== this.state) {
-            updateLocalStorageData(LocalStorageKeys.game, this.state);
-        }
-    }
-
-    initStartState() {
-        return {
-            history: [{
-                squares: Array(9).fill(null),
-            }],
-            xIsNext: true,
-            stepNumber: 0,
-            botMode: false,
-            isGameOver: false,
-            isMoveBlocked: false,
-            score: {
-                winsX: 0,
-                winsO: 0,
-            }
-        }
+        updateLocalStorageData(LocalStorageKeys.game, this.state);
     }
 
     fillSquare(i) {
@@ -75,10 +59,10 @@ class Game extends React.Component {
         if (!(calculateWinner(currentSquares) || currentSquares[i])) {
             const squares = [...currentSquares];
             squares[i] = this.state.xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O;
-            this.setState(() => {
+            this.setState((prevState) => {
                 return {
                     history: history.concat([{squares: squares}]),
-                    xIsNext: !this.state.xIsNext,
+                    xIsNext: !prevState.xIsNext,
                     stepNumber: history.length,
                 }
             });
@@ -94,26 +78,29 @@ class Game extends React.Component {
             if (this.state.botMode && !(isMoveLast || squares[i])) {
                 this.setState({isMoveBlocked: true});
                 setTimeout(() => {
+                    const botMoveIndex = calculateBotMove(this.state.history[this.state.history.length - 1].squares);
                     this.setState({isMoveBlocked: false});
-                    this.fillSquare(bestBotMove(this.state.history[this.state.history.length - 1].squares));
+                    this.fillSquare(botMoveIndex);
                 }, 500)
             }
         }
     }
 
     enableBotMode() {
-        this.setState({...this.initStartState(), botMode: true});
+        this.setState({...initStartState(), botMode: true});
     }
 
     disableBotMode() {
-        this.setState({...this.initStartState(), botMode: false});
+        this.setState({...initStartState(), botMode: false});
     }
 
     startNewGame() {
-        this.setState({
-            ...this.initStartState(),
-            botMode: this.state.botMode,
-            score: this.state.score,
+        this.setState((prevState) => {
+            return {
+                ...initStartState(),
+                botMode: prevState.botMode,
+                score: prevState.score,
+            }
         });
     }
 
@@ -140,17 +127,26 @@ class Game extends React.Component {
     }
 
     render() {
-        const currentSquares = this.state.history[this.state.stepNumber].squares;
+        const {
+            history,
+            stepNumber,
+            xIsNext,
+            isGameOver
+        } = this.state;
+        const currentSquares = history[stepNumber].squares;
         const winner = calculateWinner(currentSquares);
-        const status = winner ? `Winner is ${winner}` : `Next move: ${this.state.xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O}`;
+        const status = winner ? `Winner is ${winner}`
+            : ((history.length - 1 === stepNumber && isGameOver) ? 'Draw' : `Next move: ${xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O}`);
         return (
             <div>
                 <GameMenu startNewGame={this.startNewGameHandler}
+                          isGameStarted={history.length > 1}
                           enableBotMode={this.enableBotModeHandler}
+                          resetScore={this.resetScoreHandler}
+                          botMode={this.state.botMode}
                           disableBotMode={this.disableBotModeHandler}/>
                 <GameInfo status={status}
                           botMode={this.state.botMode}
-                          resetScore={this.resetScoreHandler}
                           score={this.state.score}/>
                 <Board squares={currentSquares} onClick={this.boardHandleClick}/>
                 <History jumpTo={this.jumpToHandleClick}/>

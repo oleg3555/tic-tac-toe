@@ -19,14 +19,7 @@
     align-items: center;
     font-size: 1.6rem;
 }
-.resetBtn{
-    padding: 0.4rem;
-    font-size: 1rem;
-    color: #fcf5f5;
-    display: block;
-    outline: none;
-    border-radius: 0.4rem;
-    background-color: red;
-    border:none;
-    cursor: pointer;
+.text{
+    margin-top: -4px;
+    letter-spacing: 1px;
 }

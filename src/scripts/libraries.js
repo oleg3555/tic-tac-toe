@@ -5,7 +5,9 @@ export const GAME_SYMBOLS = {
 export const BUTTON_VALUES = {
     vsBot: 'Play with bot',
     vsFriend: 'Play with friend',
-    newGame: 'New Game'
+    newGame: 'New Game',
+    settings:'Settings',
+    resetGame:'Reset Game'
 }
 export const COLORS = {
     green: 'green',
