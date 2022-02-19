@@ -10,7 +10,7 @@ import {GAME_SYMBOLS} from "../../scripts/libraries";
 import {calculateBotMove} from "../../scripts/bot-move";
 import {calculateScore} from "../../scripts/calculate-score";
 import {initStartState} from "../../scripts/initStartState";
-import {getHistory, getSquares} from "../../scripts/helpers";
+import {getHistory, getSquares, getStatus} from "../../scripts/helpers";
 
 class Game extends React.Component {
     constructor(props) {
@@ -33,7 +33,7 @@ class Game extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (!this.state.isGameOver) {
-            const lastSquares = this.state.history[this.state.history.length - 1].squares;
+            const lastSquares = getSquares(this.state.history);
             const winner = calculateWinner(lastSquares);
             if (winner) {
                 const {winsX, winsO} = this.state.score;
@@ -76,12 +76,12 @@ class Game extends React.Component {
     handleClick(i) {
         if (!(this.state.isMoveBlocked || this.state.isGameOver)) {
             this.fillSquare(i);
-            const squares = this.state.history[this.state.stepNumber].squares;
+            const squares = getSquares(this.state.history, this.state.stepNumber);
             const isMoveLast = squares.filter(el => el === null).length === 1;
             if (this.state.botMode && !(isMoveLast || squares[i])) {
                 this.setState({isMoveBlocked: true});
                 setTimeout(() => {
-                    const botMoveIndex = calculateBotMove(this.state.history[this.state.history.length - 1].squares);
+                    const botMoveIndex = calculateBotMove(getSquares(this.state.history));
                     this.setState({isMoveBlocked: false});
                     this.fillSquare(botMoveIndex);
                 }, 500)
@@ -109,13 +109,16 @@ class Game extends React.Component {
 
     jumpTo(isNextMove) {
         let step = isNextMove ? this.state.stepNumber + 1 : this.state.stepNumber - 1;
-        if (step % 2 && this.state.botMode && !this.state.isGameOver) {
+        let xIsNext = step % 2;
+        if (xIsNext && this.state.botMode && !this.state.isGameOver) {
             isNextMove ? step += 1 : step -= 1;
+        } else {
+            xIsNext = !xIsNext;
         }
-        if (this.state.history[step]) {
+        if (this.state.history[step] && !this.state.isMoveBlocked) {
             this.setState({
                 stepNumber: step,
-                xIsNext: !(step % 2),
+                xIsNext,
             })
         }
     }
@@ -130,16 +133,10 @@ class Game extends React.Component {
     }
 
     render() {
-        const {
-            history,
-            stepNumber,
-            xIsNext,
-            isGameOver
-        } = this.state;
-        const currentSquares = history[stepNumber].squares;
+        const {history, stepNumber} = this.state;
+        const currentSquares = getSquares(history, stepNumber);
         const winner = calculateWinner(currentSquares);
-        const status = winner ? `Winner is ${winner}`
-            : ((history.length - 1 === stepNumber && isGameOver) ? 'Draw' : `Next move: ${xIsNext ? GAME_SYMBOLS.X : GAME_SYMBOLS.O}`);
+        const status = getStatus(winner, this.state);
         return (
             <div>
                 <GameMenu startNewGame={this.startNewGameHandler}
