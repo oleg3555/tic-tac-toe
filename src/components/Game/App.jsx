@@ -12,12 +12,12 @@ import {calculateScore} from "../../scripts/calculate-score";
 import {initStartState} from "../../scripts/initStartState";
 import {getHistory, getSquares, getStatus} from "../../scripts/helpers";
 
-class Game extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = initStartState();
         this.jumpToHandleClick = this.jumpTo.bind(this);
-        this.boardHandleClick = this.handleClick.bind(this);
+        this.handleBoardClick = this.handleClick.bind(this);
         this.startNewGameHandler = this.startNewGame.bind(this);
         this.enableBotModeHandler = this.enableBotMode.bind(this);
         this.disableBotModeHandler = this.disableBotMode.bind(this)
@@ -148,11 +148,11 @@ class Game extends React.Component {
                 <GameInfo status={status}
                           botMode={this.state.botMode}
                           score={this.state.score}/>
-                <Board squares={currentSquares} onClick={this.boardHandleClick}/>
+                <Board squares={currentSquares} onClick={this.handleBoardClick}/>
                 <History jumpTo={this.jumpToHandleClick}/>
             </div>
         );
     }
 }
 
-export default Game;
+export default App;

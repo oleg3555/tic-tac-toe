@@ -4,7 +4,8 @@ import styles from './Checkbox.module.css';
 export function Checkbox({checked, onClick, text, name}) {
     return (
         <div>
-            <input type="radio" autoComplete="off"
+            <input type="radio"
+                   autoComplete="off"
                    id={name}
                    name={name}
                    onChange={onClick}
