@@ -1,0 +1,23 @@
+.button{
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    outline: none;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.4rem;
+    text-decoration: none;
+}
+.green{
+    background-color: chartreuse;
+}
+.yellow{
+    background-color: yellow;
+}
+.orange{
+    background-color: orange;
+}
+.button:hover{
+    transform: scale(1.05);
+    transition: 100ms;
+}

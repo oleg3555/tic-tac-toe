@@ -1,0 +1,25 @@
+.status {
+    margin-top: 2rem;
+    color: var(--bgColor);
+    font-size: 2rem;
+    text-align: center;
+}
+
+.description {
+    font-size: 1.5rem;
+    color: greenyellow;
+    text-align: center;
+}
+.score{
+    width: 16rem;
+    margin: 0.8rem auto 0;
+    display: flex;
+    justify-content: space-between;
+    color: var(--bgColor);
+    align-items: center;
+    font-size: 1.6rem;
+}
+.text{
+    margin-top: -4px;
+    letter-spacing: 1px;
+}
